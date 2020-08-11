@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TodoItems from "../TodoItems/TodoItems";
 
 class TodoList extends Component {
   constructor(props) {
@@ -9,41 +10,48 @@ class TodoList extends Component {
     };
   }
 
-  addItem = (e) => {
+  addItem = (ev) => {
     let state = this.state;
-    if (this._taskInput.value !== "") {
+    if (this._taskInpput.value !== "") {
       let newItem = {
-        text: this._taskInput.value,
+        text: this._taskInpput.value,
         key: Date.now(),
       };
       this.setState({ items: [...state.items, newItem] });
     }
-
-    e.preventDefault();
+    ev.preventDefault();
     this.setState({ task: "" });
   };
 
-  log = () => {
-    console.log(this.state.items);
+  // log = () => {
+  //   console.log(this.state.items);
+  // };
+
+  deleteItem = (key) => {
+    // console.log(key);
+    let filt = this.state.items.filter((item) => {
+      return item.key !== key;
+    });
+    this.setState({ items: filt });
   };
 
   render() {
     return (
-      <div>
-        <h1>hello</h1>
+      <>
         <form onSubmit={this.addItem}>
           <input
             type="text"
-            placeholder="New Task"
+            placeholder="new task"
             name="task"
             value={this.state.task}
-            onChange={(event) => this.setState({ task: event.target.value })}
-            ref={(ev) => (this._taskInput = ev)}
+            onChange={(e) => this.setState({ task: e.target.value })}
+            ref={(event) => (this._taskInpput = event)}
           />
-          <button type="submit">Add</button>
+          <button type="submit">Adicionar</button>
         </form>
-        <button onClick={this.log}>log</button>
-      </div>
+        {/* <button onClick={this.log}>log</button> */}
+        <TodoItems list={this.state.items} delete={this.deleteItem} />
+      </>
     );
   }
 }
